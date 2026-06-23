@@ -297,6 +297,15 @@ const step = spreadAngle / (N - 1);
 let order = Array.from({length:N}, (_, i) => i); // current visual order, index 0 = front/top card
 let cyclesCompleted = 0;
 
+// persistent card elements, one per GIF, created once and reused forever
+// (so GIFs never restart and non-moving cards never "jump")
+const cardEls = GIF_FILES.map((_, i) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `<div class="card-inner">${cardContent(i)}</div>`;
+  return card;
+});
+
 function cardContent(i){
   const file = GIF_FILES[i];
   const emoji = fallbackEmoji[i % fallbackEmoji.length];
@@ -306,33 +315,22 @@ function cardContent(i){
   return `<img src="${file}" alt="cute animal gif" loading="lazy" onerror="this.outerHTML='<span class=&quot;fallback&quot;>${emoji}</span>'">`;
 }
 
-function buildCards(opts = {}){
-  stage.querySelectorAll('.card').forEach(c => c.remove());
-  order.forEach((slotIndex, pos) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `<div class="card-inner">${cardContent(slotIndex)}</div>`;
-    const angle = startAngle + pos * step;
-    const z = N - pos;
-    card.style.zIndex = z;
-    card.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+function positionCard(card, pos, withTransition){
+  const angle = startAngle + pos * step;
+  const z = N - pos;
+  card.style.transition = withTransition
+    ? 'transform .5s cubic-bezier(.34,1.56,.64,1), opacity .35s ease'
+    : 'none';
+  card.style.zIndex = z;
+  card.style.opacity = '1';
+  card.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+}
 
-    if(pos === N - 1 && opts.animateEntrance){
-      // this card just rejoined the back of the fan — ease it in
-      card.style.transition = 'none';
-      card.style.opacity = '0';
-      card.style.transform += ' translateY(-20px) scale(.85)';
-      stage.appendChild(card);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          card.style.transition = 'transform .45s cubic-bezier(.34,1.56,.64,1), opacity .35s ease';
-          card.style.opacity = '1';
-          card.style.transform = `translateX(-50%) rotate(${angle}deg)`;
-        });
-      });
-    } else {
-      stage.appendChild(card);
-    }
+function buildCards(){
+  // initial placement only — attaches each card once, in its starting slot
+  cardEls.forEach(c => stage.appendChild(c));
+  order.forEach((slotIndex, pos) => {
+    positionCard(cardEls[slotIndex], pos, false);
   });
 }
 
@@ -341,17 +339,33 @@ function rotateOnce(){
   if(rotating) return;
   rotating = true;
 
-  const cards = Array.from(stage.querySelectorAll('.card'));
-  const front = cards[0];
-  if(front){
-    front.style.transition = 'transform .4s ease-in, opacity .25s ease-in';
-    front.style.transform += ' translateY(-30px) scale(.85)';
-    front.style.opacity = '0';
-  }
+  const leavingSlotIndex = order[0];
+  const leavingCard = cardEls[leavingSlotIndex];
+
+  // animate the front card flying up and out
+  leavingCard.style.transition = 'transform .4s ease-in, opacity .3s ease-in';
+  leavingCard.style.transform += ' translateY(-30px) scale(.85)';
+  leavingCard.style.opacity = '0';
+  leavingCard.style.zIndex = N + 1; // stay on top while it flies away
+
+  // meanwhile, every other card eases into its new angle right away —
+  // nothing is removed or recreated, so GIFs keep playing uninterrupted
+  order.slice(1).forEach((slotIndex, idx) => {
+    positionCard(cardEls[slotIndex], idx, true);
+  });
 
   setTimeout(() => {
     order.push(order.shift());
-    buildCards({ animateEntrance: true });
+    // bring the card back in at the rear of the fan
+    leavingCard.style.transition = 'none';
+    positionCard(leavingCard, N - 1, false);
+    leavingCard.style.opacity = '0';
+    leavingCard.style.transform += ' translateY(-20px) scale(.85)';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        positionCard(leavingCard, N - 1, true);
+      });
+    });
     rotating = false;
     checkCycle();
   }, 260);
