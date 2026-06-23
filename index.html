@@ -18,6 +18,10 @@
 
   *{box-sizing:border-box;}
 
+  html, body{
+    height:100%;
+  }
+
   body{
     margin:0;
     min-height:100vh;
@@ -31,9 +35,9 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
-    gap:clamp(24px, 6vh, 56px);
-    padding:24px 16px;
+    justify-content:flex-start;
+    gap:clamp(4px, 1vh, 16px);
+    padding:32px 16px 24px;
     overflow-x:hidden;
     -webkit-tap-highlight-color:transparent;
   }
@@ -50,13 +54,13 @@
   .title{
     font-family:'Fredoka', sans-serif;
     font-weight:700;
-    font-size:clamp(2.8rem, 11vw, 4.4rem);
+    font-size:clamp(2.2rem, 9vw, 4.4rem);
     color:var(--white);
-    -webkit-text-stroke:6px var(--rose-deep);
+    -webkit-text-stroke:clamp(3px, 0.9vw, 6px) var(--rose-deep);
     paint-order:stroke fill;
     letter-spacing:1px;
     margin:0;
-    line-height:1.05;
+    line-height:1.1;
   }
 
   .subtitle{
@@ -69,9 +73,9 @@
 
   .stage{
     position:relative;
-    width:min(94vw, 440px);
-    height:440px;
-    margin-top:8px;
+    width:min(96vw, 520px);
+    height:min(70vw, 520px);
+    margin-top:0;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -79,20 +83,20 @@
 
   .pivot-heart{
     position:absolute;
-    bottom:22px;
+    bottom:5%;
     left:50%;
     transform:translateX(-50%);
-    width:76px;
-    height:76px;
+    width:18%;
+    height:18%;
     z-index:1;
   }
 
   .card{
     position:absolute;
-    bottom:18px;
+    bottom:4%;
     left:50%;
-    width:178px;
-    height:178px;
+    width:42%;
+    height:42%;
     background:var(--white);
     border-radius:20px;
     box-shadow:0 8px 18px rgba(122,75,92,.28);
@@ -277,7 +281,7 @@
     </div>
   </div>
 
-  <footer>Made With Care, One Card At A Time</footer>
+  <footer>Made with care, one card at a time</footer>
 
 <script>
 // =====================================================================
