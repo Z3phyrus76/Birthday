@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Kimie!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBE9EE;
+    --paper-light:#FDF6F2;
+    --rose:#F2A9C0;
+    --rose-deep:#E8607E;
+    --ink:#7A4B5C;
+    --white:#FFFFFF;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--paper);
+    background-image:
+      linear-gradient(rgba(255,255,255,.35) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.35) 1px, transparent 1px);
+    background-size:28px 28px;
+    font-family:'Quicksand', sans-serif;
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding:32px 16px 56px;
+    overflow-x:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition-duration:.01ms !important; animation-duration:.01ms !important; }
+  }
+
+  .title-wrap{
+    text-align:center;
+    margin-bottom:6px;
+  }
+
+  .title{
+    font-family:'Fredoka', sans-serif;
+    font-weight:700;
+    font-size:clamp(2.4rem, 9vw, 3.6rem);
+    color:var(--white);
+    -webkit-text-stroke:6px var(--rose-deep);
+    paint-order:stroke fill;
+    letter-spacing:1px;
+    margin:0;
+    line-height:1;
+  }
+
+  .subtitle{
+    font-size:1rem;
+    font-weight:600;
+    color:var(--ink);
+    opacity:.75;
+    margin:10px 0 0;
+  }
+
+  .stage{
+    position:relative;
+    width:min(92vw, 380px);
+    height:380px;
+    margin-top:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .pivot-heart{
+    position:absolute;
+    bottom:18px;
+    left:50%;
+    transform:translateX(-50%);
+    width:64px;
+    height:64px;
+    z-index:1;
+  }
+
+  .card{
+    position:absolute;
+    bottom:14px;
+    left:50%;
+    width:148px;
+    height:148px;
+    background:var(--white);
+    border-radius:18px;
+    box-shadow:0 6px 14px rgba(122,75,92,.28);
+    transform-origin:50% 100%;
+    transition:transform .55s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease, z-index 0s;
+    border:2px dashed rgba(232,96,126,.55);
+    overflow:hidden;
+  }
+
+  .card-inner{
+    position:absolute;
+    inset:6px;
+    border-radius:13px;
+    background:var(--rose);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+
+  .card-inner img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    pointer-events:none;
+  }
+
+  .card-inner .fallback{
+    font-size:2.6rem;
+    line-height:1;
+  }
+
+  .card-inner .spinner{
+    width:22px;
+    height:22px;
+    border:3px solid rgba(122,75,92,.25);
+    border-top-color:var(--rose-deep);
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .hint{
+    margin-top:18px;
+    font-weight:600;
+    font-size:.92rem;
+    color:var(--ink);
+    opacity:.7;
+    text-align:center;
+    min-height:1.4em;
+  }
+
+  .dots{
+    display:flex;
+    gap:6px;
+    margin-top:10px;
+  }
+  .dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:rgba(122,75,92,.25);
+    transition:background .25s ease, transform .25s ease;
+  }
+  .dot.active{
+    background:var(--rose-deep);
+    transform:scale(1.25);
+  }
+
+  .note-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(122,75,92,.35);
+    backdrop-filter:blur(2px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .35s ease;
+    z-index:10;
+  }
+  .note-overlay.show{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .note-card{
+    background:var(--paper-light);
+    border-radius:22px;
+    padding:34px 28px;
+    max-width:340px;
+    width:100%;
+    text-align:center;
+    box-shadow:0 18px 40px rgba(122,75,92,.35);
+    border:2px dashed var(--rose-deep);
+    transform:scale(.85) translateY(10px);
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .note-overlay.show .note-card{
+    transform:scale(1) translateY(0);
+  }
+
+  .note-heart{
+    width:48px;
+    height:48px;
+    margin:0 auto 12px;
+  }
+
+  .note-title{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size:1.5rem;
+    color:var(--rose-deep);
+    margin:0 0 12px;
+  }
+
+  .note-body{
+    font-size:1rem;
+    line-height:1.55;
+    color:var(--ink);
+    margin:0 0 22px;
+    white-space:pre-line;
+  }
+
+  .note-close{
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:.95rem;
+    color:var(--white);
+    background:var(--rose-deep);
+    border:none;
+    border-radius:999px;
+    padding:11px 26px;
+    cursor:pointer;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .note-close:active{
+    transform:scale(.96);
+  }
+  .note-close:focus-visible, .card:focus-visible{
+    outline:3px solid var(--rose-deep);
+    outline-offset:2px;
+  }
+
+  footer{
+    margin-top:auto;
+    padding-top:30px;
+    font-size:.78rem;
+    color:var(--ink);
+    opacity:.45;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+  <div class="title-wrap">
+    <h1 class="title">Happy Birthday Kimie!</h1>
+  </div>
+
+  <div class="stage" id="stage">
+    <svg class="pivot-heart" viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M32 54 C12 40 4 28 4 18 C4 8 12 2 20 2 C26 2 30 6 32 11 C34 6 38 2 44 2 C52 2 60 8 60 18 C60 28 52 40 32 54 Z"
+            fill="#E8607E" stroke="#7A4B5C" stroke-width="2" stroke-dasharray="3 3"/>
+    </svg>
+    <!-- cards injected by JS -->
+  </div>
+
+  <p class="hint" id="hint">sending birthday wishes 🩷</p>
+  <div class="dots" id="dots"></div>
+
+  <div class="note-overlay" id="noteOverlay">
+    <div class="note-card">
+      <svg class="note-heart" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M32 54 C12 40 4 28 4 18 C4 8 12 2 20 2 C26 2 30 6 32 11 C34 6 38 2 44 2 C52 2 60 8 60 18 C60 28 52 40 32 54 Z"
+              fill="#E8607E" stroke="#7A4B5C" stroke-width="2" stroke-dasharray="3 3"/>
+      </svg>
+      <h2 class="note-title">Happy Birthday Kimie!</h2>
+      <p class="note-body" id="noteBody">[Write your birthday message here — replace this placeholder text with something just for Kimie.]</p>
+      <button class="note-close" id="noteClose">close</button>
+    </div>
+  </div>
+
+  <footer>made with care, one card at a time</footer>
+
+<script>
+// =====================================================================
+// 🐻 CUTE GIFS — self-hosted in /gifs 🐻
+// -----------------------------------------------------------------------
+// These point at GIF files you uploaded into a "gifs" folder next to
+// this index.html in your GitHub repo. Loads instantly, no hotlinking
+// issues. To swap one out, just replace the filename string below.
+// =====================================================================
+const GIF_FILES = [
+  "gifs/wave-hi.gif",
+  "gifs/holding-hands.gif",
+  "gifs/play-fight.gif",
+  "gifs/flowers.gif",
+  "gifs/kiss.gif",
+  "gifs/hug.gif"
+];
+const CARD_COUNT = GIF_FILES.length;
+const fallbackEmoji = new Array(CARD_COUNT).fill("🐻");
+
+const stage = document.getElementById('stage');
+const hint = document.getElementById('hint');
+const dotsWrap = document.getElementById('dots');
+const noteOverlay = document.getElementById('noteOverlay');
+const noteClose = document.getElementById('noteClose');
+
+const N = CARD_COUNT;
+const spreadAngle = 64; // total degrees the fan spans
+const startAngle = -spreadAngle / 2;
+const step = spreadAngle / (N - 1);
+
+let order = Array.from({length:N}, (_, i) => i); // current visual order, index 0 = front/top card
+let cyclesCompleted = 0;
+
+function cardContent(i){
+  const file = GIF_FILES[i];
+  const emoji = fallbackEmoji[i % fallbackEmoji.length];
+  if(!file){
+    return `<span class="fallback">${emoji}</span>`;
+  }
+  return `<img src="${file}" alt="cute animal gif" loading="lazy" onerror="this.outerHTML='<span class=&quot;fallback&quot;>${emoji}</span>'">`;
+}
+
+function buildCards(opts = {}){
+  stage.querySelectorAll('.card').forEach(c => c.remove());
+  dotsWrap.innerHTML = '';
+  order.forEach((slotIndex, pos) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<div class="card-inner">${cardContent(slotIndex)}</div>`;
+    const angle = startAngle + pos * step;
+    const z = N - pos;
+    card.style.zIndex = z;
+    card.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+
+    if(pos === N - 1 && opts.animateEntrance){
+      // this card just rejoined the back of the fan — ease it in
+      card.style.transition = 'none';
+      card.style.opacity = '0';
+      card.style.transform += ' translateY(-20px) scale(.85)';
+      stage.appendChild(card);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          card.style.transition = 'transform .45s cubic-bezier(.34,1.56,.64,1), opacity .35s ease';
+          card.style.opacity = '1';
+          card.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+        });
+      });
+    } else {
+      stage.appendChild(card);
+    }
+
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (pos === 0 ? ' active' : '');
+    dotsWrap.appendChild(dot);
+  });
+}
+
+let rotating = false;
+function rotateOnce(){
+  if(rotating) return;
+  rotating = true;
+
+  const cards = Array.from(stage.querySelectorAll('.card'));
+  const front = cards[0];
+  if(front){
+    front.style.transition = 'transform .4s ease-in, opacity .25s ease-in';
+    front.style.transform += ' translateY(-30px) scale(.85)';
+    front.style.opacity = '0';
+  }
+
+  setTimeout(() => {
+    order.push(order.shift());
+    buildCards({ animateEntrance: true });
+    rotating = false;
+    checkCycle();
+  }, 260);
+}
+
+function checkCycle(){
+  const isOriginal = order.every((v, i) => v === i);
+  if(isOriginal){
+    cyclesCompleted++;
+    if(cyclesCompleted === 1){
+      hint.textContent = 'happy birthday, kimie! 🎉';
+      stopAutoRotate();
+      setTimeout(() => noteOverlay.classList.add('show'), 350);
+    }
+  }
+}
+
+noteClose.addEventListener('click', () => {
+  noteOverlay.classList.remove('show');
+  hint.textContent = 'sending birthday wishes 🩷';
+  startAutoRotate();
+});
+noteOverlay.addEventListener('click', e => {
+  if(e.target === noteOverlay){
+    noteOverlay.classList.remove('show');
+    hint.textContent = 'sending birthday wishes 🩷';
+    startAutoRotate();
+  }
+});
+
+function startAutoRotate(){
+  if(rotateTimer) return;
+  rotateTimer = setInterval(rotateOnce, 2200);
+}
+function stopAutoRotate(){
+  clearInterval(rotateTimer);
+  rotateTimer = null;
+}
+let rotateTimer = null;
+
+buildCards();
+hint.textContent = 'sending birthday wishes 🩷';
+startAutoRotate();
+</script>
+</body>
+</html>
