@@ -35,9 +35,9 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
-    gap:clamp(20px, 5vh, 48px);
-    padding:24px 16px;
+    justify-content:flex-start;
+    gap:clamp(4px, 1vh, 16px);
+    padding:32px 16px 24px;
     overflow-x:hidden;
     -webkit-tap-highlight-color:transparent;
   }
@@ -75,7 +75,7 @@
     position:relative;
     width:min(96vw, 520px);
     height:min(70vw, 520px);
-    margin-top:clamp(-48px, -8vh, -16px);
+    margin-top:0;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -148,23 +148,6 @@
     opacity:.7;
     text-align:center;
     min-height:1.4em;
-  }
-
-  .dots{
-    display:flex;
-    gap:6px;
-    margin-top:10px;
-  }
-  .dot{
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:rgba(122,75,92,.25);
-    transition:background .25s ease, transform .25s ease;
-  }
-  .dot.active{
-    background:var(--rose-deep);
-    transform:scale(1.25);
   }
 
   .note-overlay{
@@ -267,7 +250,6 @@
   </div>
 
   <p class="hint" id="hint">Sending Birthday Wishes 🩷</p>
-  <div class="dots" id="dots"></div>
 
   <div class="note-overlay" id="noteOverlay">
     <div class="note-card">
@@ -304,7 +286,6 @@ const fallbackEmoji = new Array(CARD_COUNT).fill("🐻");
 
 const stage = document.getElementById('stage');
 const hint = document.getElementById('hint');
-const dotsWrap = document.getElementById('dots');
 const noteOverlay = document.getElementById('noteOverlay');
 const noteClose = document.getElementById('noteClose');
 
@@ -327,7 +308,6 @@ function cardContent(i){
 
 function buildCards(opts = {}){
   stage.querySelectorAll('.card').forEach(c => c.remove());
-  dotsWrap.innerHTML = '';
   order.forEach((slotIndex, pos) => {
     const card = document.createElement('div');
     card.className = 'card';
@@ -353,10 +333,6 @@ function buildCards(opts = {}){
     } else {
       stage.appendChild(card);
     }
-
-    const dot = document.createElement('div');
-    dot.className = 'dot' + (pos === 0 ? ' active' : '');
-    dotsWrap.appendChild(dot);
   });
 }
 
