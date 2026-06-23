@@ -31,8 +31,9 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:flex-start;
-    padding:32px 16px 56px;
+    justify-content:center;
+    gap:clamp(24px, 6vh, 56px);
+    padding:24px 16px;
     overflow-x:hidden;
     -webkit-tap-highlight-color:transparent;
   }
@@ -43,19 +44,19 @@
 
   .title-wrap{
     text-align:center;
-    margin-bottom:6px;
+    margin-bottom:0;
   }
 
   .title{
     font-family:'Fredoka', sans-serif;
     font-weight:700;
-    font-size:clamp(2.4rem, 9vw, 3.6rem);
+    font-size:clamp(2.8rem, 11vw, 4.4rem);
     color:var(--white);
     -webkit-text-stroke:6px var(--rose-deep);
     paint-order:stroke fill;
     letter-spacing:1px;
     margin:0;
-    line-height:1;
+    line-height:1.05;
   }
 
   .subtitle{
@@ -68,9 +69,9 @@
 
   .stage{
     position:relative;
-    width:min(92vw, 380px);
-    height:380px;
-    margin-top:22px;
+    width:min(94vw, 440px);
+    height:440px;
+    margin-top:8px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -78,23 +79,23 @@
 
   .pivot-heart{
     position:absolute;
-    bottom:18px;
+    bottom:22px;
     left:50%;
     transform:translateX(-50%);
-    width:64px;
-    height:64px;
+    width:76px;
+    height:76px;
     z-index:1;
   }
 
   .card{
     position:absolute;
-    bottom:14px;
+    bottom:18px;
     left:50%;
-    width:148px;
-    height:148px;
+    width:178px;
+    height:178px;
     background:var(--white);
-    border-radius:18px;
-    box-shadow:0 6px 14px rgba(122,75,92,.28);
+    border-radius:20px;
+    box-shadow:0 8px 18px rgba(122,75,92,.28);
     transform-origin:50% 100%;
     transition:transform .55s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease, z-index 0s;
     border:2px dashed rgba(232,96,126,.55);
@@ -240,8 +241,6 @@
   }
 
   footer{
-    margin-top:auto;
-    padding-top:30px;
     font-size:.78rem;
     color:var(--ink);
     opacity:.45;
@@ -263,7 +262,7 @@
     <!-- cards injected by JS -->
   </div>
 
-  <p class="hint" id="hint">sending birthday wishes 🩷</p>
+  <p class="hint" id="hint">Sending Birthday Wishes 🩷</p>
   <div class="dots" id="dots"></div>
 
   <div class="note-overlay" id="noteOverlay">
@@ -278,7 +277,7 @@
     </div>
   </div>
 
-  <footer>made with care, one card at a time</footer>
+  <footer>Made With Care, One Card At A Time</footer>
 
 <script>
 // =====================================================================
@@ -383,7 +382,7 @@ function checkCycle(){
   if(isOriginal){
     cyclesCompleted++;
     if(cyclesCompleted === 1){
-      hint.textContent = 'happy birthday, kimie! 🎉';
+      hint.textContent = 'Happy Birthday, Kimie! 🎉';
       stopAutoRotate();
       setTimeout(() => noteOverlay.classList.add('show'), 350);
     }
@@ -392,13 +391,13 @@ function checkCycle(){
 
 noteClose.addEventListener('click', () => {
   noteOverlay.classList.remove('show');
-  hint.textContent = 'sending birthday wishes 🩷';
+  hint.textContent = 'Sending Birthday Wishes 🩷';
   startAutoRotate();
 });
 noteOverlay.addEventListener('click', e => {
   if(e.target === noteOverlay){
     noteOverlay.classList.remove('show');
-    hint.textContent = 'sending birthday wishes 🩷';
+    hint.textContent = 'Sending Birthday Wishes 🩷';
     startAutoRotate();
   }
 });
@@ -414,7 +413,7 @@ function stopAutoRotate(){
 let rotateTimer = null;
 
 buildCards();
-hint.textContent = 'sending birthday wishes 🩷';
+hint.textContent = 'Sending Birthday Wishes 🩷';
 startAutoRotate();
 </script>
 </body>
